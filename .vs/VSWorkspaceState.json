@@ -1,0 +1,15 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\app",
+    "\\app\\Http",
+    "\\public",
+    "\\public\\img",
+    "\\resources",
+    "\\resources\\views",
+    "\\resources\\views\\page",
+    "\\routes"
+  ],
+  "SelectedNode": "\\public\\img\\logo.png",
+  "PreviewInSolutionExplorer": false
+}

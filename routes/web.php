@@ -15,6 +15,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/hello', function () {
-    return "HELOOOO";
-});
+Route::get('/index', 'PageController@getIndex');
+
+Route::get('/login', 'PageController@getLogin');
+
+Route::get('/itemdetail', 'PageController@getItemDetail');
+
+Route::get('/register', 'PageController@getRegister');
+
+Route::get('/inputform', 'PageController@getInputForm');
