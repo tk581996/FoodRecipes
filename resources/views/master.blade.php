@@ -10,13 +10,13 @@
 
   <title>FoodRecipes</title>
   <!-- Main css -->
-  <link href="css/main.scss" rel="stylesheet">
-  <!-- Including a css file in a blade template -->
-  @stack('styles')
-  @stack('scripts')
+  <link ng-href="css/main.scss" rel="stylesheet" type="text/css">
   <!-- Template css -->
   <link href="source/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link href="source/css/modern-business.css" rel="stylesheet">
+  <!-- Including a css file in a blade template -->
+  @stack('styles')
+  @stack('scripts')
 </head>
 
 <body>

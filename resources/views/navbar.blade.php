@@ -1,14 +1,14 @@
 
 <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container">
-      <a class="navbar-brand" href="index">Food<span style="color: #3CB371;">Recipe.</span></a>
+      <a class="navbar-brand" href="{{ URL::to('/index') }}">Food<span style="color: #3CB371;">Recipe.</span></a>
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <a class="nav-link" href="index">Home</a>
+            <a class="nav-link" href="{{ URL::to('/index') }}">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="login">Login</a>
+            <a class="nav-link" href="{{ URL::to('/login') }}">Login</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">Logout</a>

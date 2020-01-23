@@ -18,8 +18,9 @@ Route::get('/', function () {
 Route::get('/index', 'PageController@getIndex');
 
 Route::get('/login', 'PageController@getLogin');
+Route::get('/login', 'PageController@getLogin');
 
-Route::get('/itemdetail', 'PageController@getItemDetail');
+Route::get('/itemdetail/{id}', 'PageController@getItemDetail');
 
 Route::get('/register', 'PageController@getRegister');
 
