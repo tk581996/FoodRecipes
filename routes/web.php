@@ -11,16 +11,16 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Route::get('/index', 'PageController@getIndex');
 
 Route::get('/login', 'PageController@getLogin');
-Route::get('/login', 'PageController@getLogin');
+Route::post('/login', 'PageController@postLogin');
+
+Route::get('logout', 'PageController@getLogout');
 
 Route::get('/itemdetail/{id}', 'PageController@getItemDetail');
+
+Route::post('/itemdetail/comment/{id}', 'PageController@postComment');
 
 Route::get('/register', 'PageController@getRegister');
 

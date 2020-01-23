@@ -10,72 +10,42 @@
             <h1>レシピ追加</h1>
         </div>
         <div class="item">
-            <label for="name">Name<span>*</span></label>
-            <div class="name-item">
-                <input id="name" type="text" name="name" placeholder="First" required />
-                <input id="name" type="text" name="name" placeholder="Last" required />
-            </div>
+            <label for="apply">投稿タイトル</label>
+            <input id="apply" type="text" name="title" />
         </div>
         <div class="item">
-            <label for="bdate">Date of Birth<span>*</span></label>
-            <input id="bdate" type="date" name="bdate" required />
-            <i class="fas fa-calendar-alt"></i>
+            <label for="period">料理名</label>
+            <input id="period" type="text" name="food_name" />
         </div>
         <div class="item">
-            <div class="name-item">
-                <div>
-                    <label for="address">Email Address<span>*</span></label>
-                    <input id="address" type="text" name="address" required />
-                </div>
-                <div>
-                    <label for="number">Phone Number</label>
-                    <input id="number" type="tel" name="number" />
-                </div>
-            </div>
+            <label for="period">作り時間</label>
+            <input id="period" type="number" name="cook_time" min='0' max='9999' />
         </div>
         <div class="item">
-            <div class="name-item">
-                <div>
-                    <label for="language">Which languages do you speak?</label>
-                    <input id="language" type="text" name="languages" />
-                </div>
-                <div>
-                    <label for="nationality">Nationality of your Passport</label>
-                    <input id="nationality" type="text" name="Nationality" />
-                </div>
-            </div>
-        </div>
-        <div class="item">
-            <div class="name-item">
-                <div>
-                    <label for="country">In which country do you like to get a job?</label>
-                    <input id="country" type="text" name="country" />
-                </div>
-                <div>
-                    <label for="job">The job you want to apply for?</label>
-                    <input id="job" type="text" name="job" />
-                </div>
-            </div>
-        </div>
-        <div class="item">
-            <label for="apply">Why do you apply for this job?</label>
-            <input id="apply" type="text" name="text" />
-        </div>
-        <div class="item">
-            <label for="period">The period you would like to work in this job?</label>
-            <input id="period" type="text" name="text" />
-        </div>
-        <div class="item">
-            <label for="period">Select country?</label>
-            <div class="city-item">
+            <label for="period">調味料</label>
+            <div class="city-item" id="buildyourform">
                 <select required>
-                    <option value="">Country</option>
+                    <option value="">――――――調味料を選んでください――――――</option>
                     @foreach($material_master as $material_master)
                     <option value="">{{$material_master->material_name}}</option>
                     @endforeach
                 </select>
             </div>
+            <input type="button" value="Add a field" class="add" id="add" />
         </div>
+        <div class="item">
+            <label for="period">材料</label>
+            <textarea type="text" name="food_name"></textarea>
+        </div>
+        <div class="item">
+            <label for="period">何人前</label>
+            <input id="period" type="number" name="serving_for" min='1' max='100' />
+        </div>
+        <div class="item">
+            <label for="period">作り方</label>
+            <textarea type="text" name="direction"></textarea>
+        </div>
+
         <div class="item">
             <label for="cv">Upload CV<span>*</span></label>
             <input id="cv" type="file" required />
@@ -97,4 +67,25 @@
         </div>
     </form>
 </div>
+@push('scripts')
+<script>
+    $(document).ready(function() {
+        $("#add").click(function() {
+            var lastField = $("#buildyourform div:last");
+            var intId = (lastField && lastField.length && lastField.data("idx") + 1) || 1;
+            var fieldWrapper = $("<div id=\"field" + intId + "\"/>");
+            fieldWrapper.data("idx", intId);
+            var fName = $("<select type=\"text\" class=\"fieldname\"><select>");
+            var removeButton = $("<input type=\"button\" class=\"remove\" value=\"-\" />");
+            removeButton.click(function() {
+                $(this).parent().remove();
+            });
+            fieldWrapper.append(fName);
+            fieldWrapper.append(removeButton);
+            $("#buildyourform").append(fieldWrapper);
+        });
+
+    });
+</script>
+@endpush
 @endsection

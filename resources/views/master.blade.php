@@ -15,6 +15,7 @@
   <link href="source/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link href="source/css/modern-business.css" rel="stylesheet">
   <!-- Including a css file in a blade template -->
+  <link href="https://fonts.googleapis.com/css?family=Noto+Serif+JP&display=swap&subset=japanese" rel="stylesheet">
   @stack('styles')
   @stack('scripts')
 </head>
