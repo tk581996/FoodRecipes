@@ -15,9 +15,14 @@ class Recipe extends Model
         return $this->belongsToMany('App\MaterialMaster', 'material', 'recipe_id', 'material_master_id');
     }
 
-    public function comment()
+    public function comments()
     {
         return $this->hasMany('App\Comment', 'recipe_id');
+    }
+
+    public function likes()
+    {
+        return $this->hasMany('App\Liked', 'recipe_id');
     }
 
     // join with recipe img table via one-many relationship

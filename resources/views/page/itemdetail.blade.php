@@ -33,9 +33,27 @@
 
   <!-- Page Heading/Breadcrumbs -->
   <h1 class="mt-4 mb-3">{{$recipe->title}}
-    <!-- <small>by
-      <a href="#">Start Bootstrap</a>
-    </small> -->
+    <small>
+      @foreach($recipe_likes->where('is_liked',0) as $like)
+      @if($like->user_id === NULL)
+      <a href="like/{{$recipe->recipe_id}}" style="color: red;"><i class="far fa-heart"></i></a>
+      @endif
+      @endforeach
+
+      @foreach($recipe_likes->where('is_liked',1) as $like)
+      @if($like->user_id == Auth::user()->user_id)
+      <a href="like/delete/{{$like->liked_id}}" style="color: red;"><i class="fas fa-heart"></i></a>
+      @endif
+      @endforeach
+
+      @foreach($recipe_likes->where('is_liked',0) as $like)
+      @if($like->user_id == Auth::user()->user_id)
+      <a href="like/edit/{{$like->liked_id}}" style="color: red;"><i class="far fa-heart"></i></a>
+      @endif
+      @endforeach
+
+      {{count($recipe_likes->where('is_liked',1))}}
+    </small>
   </h1>
 
   <!-- <ol class="breadcrumb">
@@ -124,16 +142,21 @@
       @endif
 
       <!-- Single Comment -->
-      @foreach($recipe->comment as $comment)
+      @foreach($recipe->comments as $comment)
+      @if($comment->is_deleted == 0)
       <div class="media mb-4">
         <div class="media-body">
           <h5 class="mt-0">
             {{$comment->user->nickname}}
             <small style="font-size: 13px;">{{$comment->created_at->format('Y年m月d日、h:m:s')}}</small>
+            @if(Auth::check() && Auth::user()->user_id == $comment->user_id)
+            <a href="comment/delete/{{$comment->comment_id}}" class="btn btn-danger">削除</a>
+            @endif
           </h5>
           {{$comment->content}}
         </div>
       </div>
+      @endif
       @endforeach
 
     </div>
