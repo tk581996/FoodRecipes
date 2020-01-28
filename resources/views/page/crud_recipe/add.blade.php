@@ -26,7 +26,8 @@
 @endpush
 <div class="testbox">
     <!-- form with upload img have to enctype="...." to available -->
-    <form method="post" action="{{ URL::to('inputform/add') }}" enctype="multipart/form-data">
+    <form method="post" action="{{ URL::to('inputform/add') }}" files=true enctype="multipart/form-data">
+        @csrf
         <div class="banner">
             <h1>レシピ追加</h1>
         </div>
@@ -60,11 +61,14 @@
                 <select name="material[]" class="@error('material') is-invalid @enderror" required>
                     <option value="0">――――――調味料を選んでください――――――</option>
                     @foreach($material_master as $material_master)
-                    <option value="{{$material_master->material_master_id}}">{{$material_master->material_name}}</option>
+                    <option value="{{$material_master->material_master_id}}"> {{$material_master->material_name}}</option>
                     @endforeach
                 </select>
             </div>
         </div>
+        @if(session('material-error'))
+        <div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> {{session('material-error')}}</div>
+		@endif
         @error('material')
         <div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> {{ $message }}</div>
         @enderror
@@ -98,6 +102,9 @@
             <label for="cv">レシピ写真<span>*</span></label>
             <input id="cv" class="@error('fileimg') is-invalid @enderror" type="file" name="fileimg[]" multiple />
         </div>
+        @if(session('img-error'))
+        <div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> {{session('img-error')}}</div>
+		@endif
         @error('fileimg')
         <div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> {{ $message }}</div>
         @enderror
@@ -106,7 +113,6 @@
         <div class="btn-block">
             <button type="submit" href="/">作成</button>
         </div>
-        {{ csrf_field() }}
     </form>
 </div>
 @push('scripts')

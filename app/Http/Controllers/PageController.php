@@ -11,6 +11,7 @@ use App\RecipeImg;
 use App\Comment;
 use App\User;
 use App\Liked;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
@@ -241,12 +242,12 @@ class PageController extends Controller
         $validatedData = $request->validate([
             'title' => 'required|max:25',
             'food_name' => 'required|max:25',
-            'cook_time' => 'required|digits:4',
+            'cook_time' => 'required|max:4',
             'food_material' => 'required|max:255',
-            'serving_for' => 'required|digits:2',
+            'serving_for' => 'required|max:2',
             'direction' => 'required|max:1000',
             'material' => 'required|array',
-            'fileimg' => 'required|image',
+            'fileimg' => 'required',
         ], [
             'title.required' => 'タイトルを入力してください',
             'title.max' => 'タイトルは、25文字の間で設定する必要があります',
@@ -261,8 +262,33 @@ class PageController extends Controller
             'direction.required' => '作り方を入力してください',
             'direction.max' => '作り方は、1000文字の間で設定する必要があります',
             'fileimg.required' => 'レシピの写真を入力してください',
-            'fileimg.image' => 'アップロードしたファイルは写真の形式ではない',
+            'fileimg.mimes' => 'アップロードしたファイルは写真の形式ではない',
         ]);
+
+        //check neu anh khong dung dinh dang
+        $list_extension = ['jpeg', 'jpg', 'jpe', 'png', 'svg', 'webp'];
+        $files = $request->file('fileimg');
+        foreach ($files as $file) {
+            $extension = $file->getClientOriginalExtension();
+            if (in_array($extension, $list_extension) == false) {
+                return redirect('inputform')->with('img-error', 'アップロードしたファイルは写真の形式ではない。');
+            }
+        }
+
+        //check neu trug gia vi
+        $master_materials = $request->material;
+        $exist = [];
+        if ($master_materials[0] == '0') {
+            return redirect('inputform')->with('material-error', '調味料の選んでください。');
+        } else {
+            foreach ($master_materials as $master_material) {
+                if (in_array($master_material, $exist) == false) {
+                    array_push($exist, $master_material);
+                } else {
+                    return redirect('inputform')->with('material-error', '調味料の選びは重複できません。');
+                }
+            }
+        }
 
         $recipe = new Recipe;
         $recipe->user_id = Auth::user()->user_id;
@@ -274,7 +300,7 @@ class PageController extends Controller
         $recipe->direction = $request->direction;
         $recipe->save();
 
-        $master_materials = $request->material;
+
         foreach ($master_materials as $master_material) {
             $material = new Material;
             $material->recipe_id = $recipe->recipe_id;
@@ -282,7 +308,6 @@ class PageController extends Controller
             $material->save();
         }
 
-        $files = $request->file('fileimg');
         foreach ($files as $file) {
             $extension = $file->getClientOriginalExtension();
             $fileimg = Auth::user()->user_id . "_" . now()->format("YmdHis") . "_" . Str::random(4) . "." . $extension;
@@ -325,7 +350,7 @@ class PageController extends Controller
         $master_materials = $request->material;
         foreach ($master_materials as $master_material) {
             $old = $request->oldmaterial;
-        dd($old);
+            dd($old);
             $material = Material::where('recipe_id', $id)->where('material_master_id', $old)->first(); // dang sai vi $master_material la nguoi dung nhap vao. Khong phai la cai trong db
             $material->material_master_id = $master_material;
             $material->save();
