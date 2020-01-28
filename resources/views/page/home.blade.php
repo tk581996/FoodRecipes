@@ -1,26 +1,43 @@
 @extends('master')
 @section('content')
-@push('styles')
-<link href="../fontawesome/css/all.css" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css?family=Noto+Serif+JP&display=swap&subset=japanese" rel="stylesheet">
-@endpush
 <!-- Header -->
 @include("../header")
-<div class="container" style="font-family: 'Noto Serif JP', serif">
+<div class="container">
   <hr>
-  <h1 class="my-4">Welcome to Modern Business</h1>
+  <div class="row">
+    <select name="sort" onchange="location = this.value">
+      <option value="">Order</option>
+      <option value="{{ URL::to('/index') }}/?sort=created_at_desc">Orderby Created time desc</option>
+      <option value="{{ URL::to('/index') }}/?sort=created_at_asc">Order by Created time asc</option>
+      <option value="{{ URL::to('/index') }}/?sort=like_desc">Order by Created time asc</option>
+    </select>
+
+    <form method="post" action="search">
+      @csrf
+      <input type="text" placeholder="検索" name="search">
+      <button type="submit" hidden>Submit</button>
+    </form>
+  </div>
+
+  <hr>
+  <h1 class="my-4">いらっしゃいませ、こんにちは</h1>
 
   <div class="row">
     @foreach($recipes as $show_recipe)
     <div class="col-lg-4 col-sm-6 portfolio-item">
       <div class="card h-100">
-        <a href="{{ URL::to('/itemdetail', $show_recipe->recipe_id) }}"><img class="card-img-top" src="{{$show_recipe->recipes_img()->first()->recipe_img}}" alt=""></a>
+        <a href="{{ URL::to('/itemdetail', $show_recipe->recipe_id) }}"><img class="card-img-top" src="upload/recipe-img/{{$show_recipe->recipes_img()->first()->recipe_img}}" alt=""></a>
         <div class="card-body">
           <h4 class="card-title">
             <a href="{{ URL::to('/itemdetail', $show_recipe->recipe_id) }}">{{$show_recipe->title}}</a>
           </h4>
-          <p class="card-text">{{$show_recipe->food_name}} <i class="far fa-clock"></i><span style="font-size: 13px;">- {{$show_recipe->cook_time}}分ぐらい</span></p>
-          <p style="font-size: 12px;"><span style="font-size: 20px;">{{$show_recipe->user()->first()->nickname}}</span> - {{$show_recipe->created_at->format('Y年m月d日、h時m分s秒')}}</p>
+          <p class="card-text">{{$show_recipe->food_name}}
+            <i class="far fa-clock" style='margin-left:20px'></i>
+            <span style="font-size: 13px;"> {{$show_recipe->cook_time}}分ぐらい</span>
+            <i class="fas fa-heart" style='margin-left:20px;color: red;'></i>
+            <span>{{count($show_recipe->likes->where('is_liked',1))}}</span>
+          </p>
+          <p style="font-size: 12px;"><span style="font-size: 20px;">{{$show_recipe->user()->first()->nickname}}</span> - {{$show_recipe->created_at->format('Y年m月d日、H時i分s秒')}}</p>
         </div>
       </div>
     </div>

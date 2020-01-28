@@ -1,52 +1,78 @@
 @extends('master')
 @section('content')
 @push('styles')
-<!-- Register Css -->
-<!-- Font Icon -->
-<link rel="stylesheet" href="reg_source/fonts/material-icon/css/material-design-iconic-font.min.css">
-<!-- Main css -->
-<link rel="stylesheet" href="reg_source/css/style.css">
+<!--Login form-->
+{{ HTML::style("login_sourse/css/util.css")}}
+{{ HTML::style("login_sourse/css/main.scss")}}
+<!--===============================================================================================-->
 @endpush
-<div class="main">
+<div class="limiter" >
+	<div class="container-login100">
+		<div class="wrap-login100">
+			<div class="login100-form-title" style="background-image: url(https://mirai-image.jp/wp-content/uploads/2020/01/3d4761e2371f555c046cbd32f6f6d955-1-800x480.png);">
+				<span class="login100-form-title-1">
+					ユーザー新規登録
+				</span>
+			</div>
 
-    <section class="signup">
-        <!-- <img src="images/signup-bg.jpg" alt=""> -->
-        <div class="container">
-            <div class="signup-content">
-                <form method="POST" id="signup-form" class="signup-form">
-                    <h2 class="form-title">Create account</h2>
-                    <div class="form-group">
-                        <input type="text" class="form-input" name="name" id="name" placeholder="Your Name" />
-                    </div>
-                    <div class="form-group">
-                        <input type="email" class="form-input" name="email" id="email" placeholder="Your Email" />
-                    </div>
-                    <div class="form-group">
-                        <input type="text" class="form-input" name="password" id="password" placeholder="Password" />
-                        <span toggle="#password" class="zmdi zmdi-eye field-icon toggle-password"></span>
-                    </div>
-                    <div class="form-group">
-                        <input type="password" class="form-input" name="re_password" id="re_password" placeholder="Repeat your password" />
-                    </div>
-                    <div class="form-group">
-                        <input type="checkbox" name="agree-term" id="agree-term" class="agree-term" />
-                        <label for="agree-term" class="label-agree-term"><span><span></span></span>I agree all statements in <a href="#" class="term-service">Terms of service</a></label>
-                    </div>
-                    <div class="form-group">
-                        <input type="submit" name="submit" id="submit" class="form-submit" value="Sign up" />
-                    </div>
-                </form>
-                <p class="loginhere">
-                    Have already an account ? <a href="#" class="loginhere-link">Login here</a>
-                </p>
-            </div>
-        </div>
-    </section>
+			<form method="post" action="{{ url('/register') }}" class="login100-form validate-form">
+				<div class="wrap-input100 validate-input m-b-26" data-validate="ユーザーIDが必須">
+					<span class="label-input100">ログインID</span>
+					<input class="input100 @error('login_id') is-invalid @enderror" type="text" name="login_id" placeholder="ユーザーIDを入力">
+				</div>
+				@error('login_id')
+				<div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> {{ $message }}</div>
+				@enderror
+                
+                <div class="wrap-input100 validate-input m-b-26" data-validate="ニックネームが必須">
+					<span class="label-input100">ニックネーム</span>
+					<input class="input100 @error('nickname') is-invalid @enderror" type="text" name="nickname" placeholder="ニックネームを入力">
+				</div>
+				@error('nickname')
+				<div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> {{ $message }}</div>
+				@enderror
 
+				<div class="wrap-input100 validate-input m-b-18" data-validate="パスワードが必須">
+					<span class="label-input100">パスワード</span>
+					<input class="input100 @error('password') is-invalid @enderror" type="password" name="password" placeholder="パスワードを入力">
+					<span class="focus-input100"></span>
+				</div>
+				@error('password')
+				<div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> {{ $message }}</div>
+				@enderror 
+                
+                <div class="wrap-input100 validate-input m-b-18" data-validate="パスワードが必須">
+					<span class="label-input100">もう一度パスワードを入力してください</span>
+					<input class="input100 @error('repassword') is-invalid @enderror" type="password" name="repassword" placeholder="パスワードを入力">
+					<span class="focus-input100"></span>
+				</div>
+				@error('repassword')
+				<div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> {{ $message }}</div>
+				@enderror
+				
+				<div class="container-login100-form-btn">
+					<button type="submit" class="login100-form-btn">
+						アカウントを作成
+					</button>
+				</div>
+				{{ csrf_field() }}
+			</form>
+		</div>
+	</div>
 </div>
 @push('scripts')
-<!-- JS register -->
-<script src="reg_source/vendor/jquery/jquery.min.js"></script>
-<script src="reg_source/js/main.js"></script>
+<!-- JS login -->
+{{ HTML::script("login_sourse/vendor/jquery/jquery-3.2.1.min.js")}}
+<!--===============================================================================================-->
+{{ HTML::script("login_sourse/vendor/animsition/js/animsition.min.js")}}
+<!--===============================================================================================-->
+{{ HTML::script("login_sourse/vendor/bootstrap/js/popper.js")}}
+<!--===============================================================================================-->
+{{ HTML::script("login_sourse/vendor/select2/select2.min.js")}}
+<!--===============================================================================================-->
+{{ HTML::script("login_sourse/vendor/daterangepicker/moment.min.js")}}
+{{ HTML::script("login_sourse/vendor/daterangepicker/daterangepicker.js")}}
+<!--===============================================================================================-->
+{{ HTML::script("login_sourse/vendor/countdowntime/countdowntime.js")}}
 @endpush
 @endsection

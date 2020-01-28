@@ -10,12 +10,13 @@
 
   <title>FoodRecipes</title>
   <!-- Main css -->
-  <link ng-href="css/main.scss" rel="stylesheet" type="text/css">
+  {{ HTML::style('css/main.css')}}
   <!-- Template css -->
-  <link href="source/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="source/css/modern-business.css" rel="stylesheet">
+  {{ HTML::style('source/vendor/bootstrap/css/bootstrap.min.css') }}
+  {{ HTML::style('source/css/modern-business.css') }}
   <!-- Including a css file in a blade template -->
   <link href="https://fonts.googleapis.com/css?family=Noto+Serif+JP&display=swap&subset=japanese" rel="stylesheet">
+  {{ HTML::style('fontawesome/css/all.css') }}
   @stack('styles')
   @stack('scripts')
 </head>
@@ -33,9 +34,8 @@
   @include("footer")
 
   <!-- JS template -->
-  <script src="source/vendor/jquery/jquery.min.js"></script>
-  <script src="source/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
+  {{ HTML::script('source/vendor/jquery/jquery.min.js')}}
+  {{ HTML::script('source/vendor/bootstrap/js/bootstrap.bundle.min.js')}}
   <!-- Including a scripts file in a blade template -->
   @stack('scripts')
 </body>

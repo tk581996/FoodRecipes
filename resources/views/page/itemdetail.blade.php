@@ -22,38 +22,46 @@
     text-decoration: none;
   }
 </style>
-<link href="../source/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-<link href="../source/css/modern-business.css" rel="stylesheet">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-<link href="../fontawesome/css/all.css" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css?family=Noto+Serif+JP&display=swap&subset=japanese" rel="stylesheet">
 @endpush
 <!-- Page Content -->
-<div class="container" style="font-family: 'Noto Serif JP', serif">
+<div class="container">
 
   <!-- Page Heading/Breadcrumbs -->
   <h1 class="mt-4 mb-3">{{$recipe->title}}
     <small>
-      @foreach($recipe_likes->where('is_liked',0) as $like)
-      @if($like->user_id === NULL)
-      <a href="like/{{$recipe->recipe_id}}" style="color: red;"><i class="far fa-heart"></i></a>
+      <!-- neu chua dang nhap thi hien thi tim khong mau -->
+      @if(Auth::guest()) 
+      <a href="{{ URL::to('/login')}}" style="color: red;"><i class="far fa-heart"></i></a>
+      @else 
+      <!-- hoac neu nguoi dug chua co id trong bang liked thi create liked -->
+        @if((count($recipe_likes->where('user_id',Auth::id()))) == 0)
+        <a href="like/{{$recipe->recipe_id}}" style="color: red;"><i class="far fa-heart"></i></a>
+        @endif
       @endif
-      @endforeach
 
       @foreach($recipe_likes->where('is_liked',1) as $like)
-      @if($like->user_id == Auth::user()->user_id)
+      @if(Auth::check() && $like->user_id == Auth::user()->user_id)
+      <!-- chuyen is_like ve 0 -> trang thai chua like -->
       <a href="like/delete/{{$like->liked_id}}" style="color: red;"><i class="fas fa-heart"></i></a>
       @endif
       @endforeach
 
       @foreach($recipe_likes->where('is_liked',0) as $like)
-      @if($like->user_id == Auth::user()->user_id)
+      @if(Auth::check() && $like->user_id == Auth::user()->user_id)
+      <!-- chuyen is_like ve 1 -> trang thai da like -->
       <a href="like/edit/{{$like->liked_id}}" style="color: red;"><i class="far fa-heart"></i></a>
       @endif
       @endforeach
 
       {{count($recipe_likes->where('is_liked',1))}}
     </small>
+    @if(Auth::check() && Auth::user()->user_id == $recipe->user_id) 
+    <div class="float-right">
+      <a href="{{ url('/inputform/edit/'.$recipe->recipe_id) }}" class="btn btn-success">編集</a>
+      <a href="{{ url('/inputform/delete/'.$recipe->recipe_id) }}"  onclick="return confirm('本当に削除？');" class="btn btn-danger">削除</a>
+    </div>
+    @endif
   </h1>
 
   <!-- <ol class="breadcrumb">
@@ -66,7 +74,7 @@
   <hr>
 
   <!-- Date/Time -->
-  <p style="font-style: italic;font-size: 15px">{{$recipe->created_at->format('Y年m月d日、h時m分s秒')}}</p>
+  <p style="font-style: italic;font-size: 15px">{{$recipe->created_at->format('Y年m月d日、H時i分s秒')}}</p>
   <p>投稿者：{{$recipe_user->nickname}}</p>
 
   <hr>
@@ -80,8 +88,9 @@
       <!-- Carousel Image -->
       <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
         <ol class="carousel-indicators">
-          @for($i=0;$i< count($recipe_imgs);$i++) @if ($i==0) <li data-target="#carouselExampleIndicators" data-slide-to="{{$i}}" class="active">
-            </li>
+          @for($i=0;$i< count($recipe_imgs);$i++) 
+            @if ($i==0) 
+            <li data-target="#carouselExampleIndicators" data-slide-to="{{$i}}" class="active"></li>
             @else
             <li data-target="#carouselExampleIndicators" data-slide-to="{{$i}}"></li>
             @endif
@@ -91,11 +100,11 @@
           @foreach($recipe_imgs as $recipe_img)
           @if($loop->first)
           <div class="carousel-item active">
-            <img src="{{$recipe_img->recipe_img}}" style="height:490px;">
+            <img src="../upload/recipe-img/{{$recipe_img->recipe_img}}" style="height:490px;">
           </div>
           @else
           <div class="carousel-item">
-            <img src="{{$recipe_img->recipe_img}}" style="height:490px;">
+            <img src="../upload/recipe-img/{{$recipe_img->recipe_img}}" style="height:490px;">
           </div>
           @endif
           @endforeach
@@ -150,7 +159,7 @@
             {{$comment->user->nickname}}
             <small style="font-size: 13px;">{{$comment->created_at->format('Y年m月d日、h:m:s')}}</small>
             @if(Auth::check() && Auth::user()->user_id == $comment->user_id)
-            <a href="comment/delete/{{$comment->comment_id}}" class="btn btn-danger">削除</a>
+            <a href="comment/delete/{{$comment->comment_id}}" onclick="return confirm('本当に削除？');" class="btn btn-danger">削除</a>
             @endif
           </h5>
           {{$comment->content}}
@@ -223,5 +232,10 @@
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+<script>
+  function Delete(){
+    alert("vkl");
+  }
+</script>
 @endpush
 @endsection

@@ -8,3 +8,6 @@
   border: 2px solid #343a40;
   border-radius: 7px;
 }
+body {
+  font-family: "Noto Serif JP", serif !important;
+}

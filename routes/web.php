@@ -13,8 +13,15 @@
 
 Route::get('/index', 'PageController@getIndex');
 
+Route::post('/search', 'PageController@postSearch');
+Route::get('/search', 'PageController@getSearch');
+Route::get('/autocomplete', 'PageController@autocomplete');
+
 Route::get('/login', 'PageController@getLogin');
 Route::post('/login', 'PageController@postLogin');
+
+Route::get('/register', 'PageController@getRegister');
+Route::post('/register', 'PageController@postRegister');
 
 Route::get('logout', 'PageController@getLogout');
 
@@ -27,6 +34,10 @@ Route::get('/itemdetail/like/{id}', 'PageController@getLike');
 Route::get('/itemdetail/like/delete/{id}', 'PageController@getDeleteLike');
 Route::get('/itemdetail/like/edit/{id}', 'PageController@getEditLike');
 
-Route::get('/register', 'PageController@getRegister');
-
 Route::get('/inputform', 'PageController@getInputForm');
+Route::post('/inputform/add', 'PageController@postAddRecipe');
+
+Route::get('/inputform/edit/{id}', 'PageController@getEditRecipe');
+Route::post('/inputform/edit/{id}', 'PageController@postEditRecipe');
+
+Route::get('/inputform/delete/{id}', 'PageController@getDeleteRecipe');

@@ -11,8 +11,6 @@ label {
   padding: 0;
   margin: 0;
   outline: none;
-  font-family: Roboto, Arial, sans-serif;
-  font-size: 13px;
   color: #666;
   line-height: 22px;
 }
@@ -21,7 +19,7 @@ select {
   margin-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 3px;
-  width: calc(100% - 10px);
+  width: calc(94% - 10px);
   padding: 8px;
 }
 
@@ -75,13 +73,13 @@ form {
   height: 100%;
 }
 
-input {
+input, textarea {
   margin-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 3px;
 }
 
-input {
+input, textarea {
   width: calc(100% - 10px);
   padding: 5px;
 }
@@ -98,7 +96,7 @@ input:hover::placeholder {
   color: #004d00;
 }
 
-.item input:hover {
+.item input:hover, .item textarea:hover {
   border: 1px solid transparent;
   box-shadow: 0 0 6px 0 #004d00;
   color: #004d00;
@@ -184,3 +182,26 @@ button:hover {
   }
 }
 
+input.remove {
+  width: calc(4%);
+  height: 10px;
+  margin-top: 14px;
+  margin-right: 14px;
+  background-color: red;
+}
+
+input.add {
+  width: calc(15%);
+  background-color: rgb(31, 94, 6);
+  color: white;
+}
+
+input.add:hover {
+  border: 1px solid transparent;
+  box-shadow: 0 0 6px 0 #004d00;
+  color: white;
+}
+
+textarea {
+  height: 170px;
+}

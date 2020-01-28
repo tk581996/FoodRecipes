@@ -23,7 +23,7 @@
           <a class="nav-link" href="{{ URL::to('/login') }}">ログイン</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">サインアップ</a>
+          <a class="nav-link" href="{{ URL::to('/register') }}">サインアップ</a>
         </li>
         @endif
       </ul>
