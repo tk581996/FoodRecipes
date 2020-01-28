@@ -12,6 +12,7 @@ use App\Comment;
 use App\User;
 use App\Liked;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
@@ -337,6 +338,55 @@ class PageController extends Controller
     }
     public function postEditRecipe($id, Request $request)
     {
+        // $validatedData = $request->validate([
+        //     'title' => 'required|max:25',
+        //     'food_name' => 'required|max:25',
+        //     'cook_time' => 'required|max:4',
+        //     'food_material' => 'required|max:255',
+        //     'serving_for' => 'required|max:2',
+        //     'direction' => 'required|max:1000',
+        //     'material' => 'required|array',
+        //     'fileimg' => 'required',
+        // ], [
+        //     'title.required' => 'タイトルを入力してください',
+        //     'title.max' => 'タイトルは、25文字の間で設定する必要があります',
+        //     'food_name.required' => '料理名を入力してください',
+        //     'food_name.max' => '料理名は、25文字の間で設定する必要があります',
+        //     'cook_time.required' => '作り時間を入力してください',
+        //     'cook_time.max' => '作り時間は、1-999の間で設定する必要があります',
+        //     'food_material.required' => '材料を入力してください',
+        //     'food_material.max' => '材料は、255文字の間で設定する必要があります',
+        //     'serving_for.required' => '何人前を入力してください',
+        //     'serving_for.max' => '何人前は、1-99の間で設定する必要があります',
+        //     'direction.required' => '作り方を入力してください',
+        //     'direction.max' => '作り方は、1000文字の間で設定する必要があります',
+        //     'fileimg.required' => 'レシピの写真を入力してください',
+        //     'fileimg.mimes' => 'アップロードしたファイルは写真の形式ではない',
+        // ]);
+        // $list_extension = ['jpeg', 'jpg', 'jpe', 'png', 'svg', 'webp'];
+        // $files = $request->file('fileimg');
+        // foreach ($files as $file) {
+        //     $extension = $file->getClientOriginalExtension();
+        //     if (in_array($extension, $list_extension) == false) {
+        //         return back()->with('img-error', 'アップロードしたファイルは写真の形式ではない。');
+        //     }
+        // }
+
+        //check neu trug gia vi
+        $master_materials = $request->material;
+        $exist = [];
+        if ($master_materials[0] == '0') {
+            return redirect('inputform')->with('material-error', '調味料の選んでください。');
+        } else {
+            foreach ($master_materials as $master_material) {
+                if (in_array($master_material, $exist) == false) {
+                    array_push($exist, $master_material);
+                } else {
+                    return back()->with('material-error', '調味料の選びは重複できません。');
+                }
+            }
+        }
+
         $recipe = Recipe::find($id);
         $recipe->user_id = Auth::user()->user_id;
         $recipe->title = $request->title;
@@ -347,30 +397,39 @@ class PageController extends Controller
         $recipe->direction = $request->direction;
         $recipe->save();
 
-        $master_materials = $request->material;
-        foreach ($master_materials as $master_material) {
-            $old = $request->oldmaterial;
-            dd($old);
-            $material = Material::where('recipe_id', $id)->where('material_master_id', $old)->first(); // dang sai vi $master_material la nguoi dung nhap vao. Khong phai la cai trong db
-            $material->material_master_id = $master_material;
-            $material->save();
-        }
-
-
-        $files = $request->file('fileimg');
-        if ($files != NULL) {
-            foreach ($files as $file) {
-                $recipe_img = RecipeImg::find('recipe_id', $id)->first();
-                $extension = $file->getClientOriginalExtension();
-                $fileimg = Auth::user()->user_id . "_" . now()->format("YmdHis") . "_" . Str::random(4) . "." . $extension;
-                $filepath = public_path('upload/recipe-img/');
-                $file->move($filepath, $fileimg);
-                unlink($filepath . $recipe_img->recipe_img);
-                $recipe_img->recipe_id = $recipe->recipe_id;
-                $recipe_img->recipe_img = $fileimg;
-                $recipe_img->save();
+        $old = $request->oldmaterial;
+        $oldcount = count($old);
+        $new = $master_materials;
+        $newcount = count($new);
+        $arr = [$old, $new]; //0 la gia tri cu=>old, 1 la gia tri moi => new
+        if ($newcount == $oldcount) { //update
+            for ($i = 0; $i < count($new); $i++) {
+                if ($arr[0][$i] != $arr[1][$i]) {
+                    $test = DB::table('material')->where('recipe_id', $id)->where('material_master_id', $arr[0][$i])->update(['material_master_id' => $arr[1][$i]]);
+                }
+            }
+        } else { //create new
+            $tmp = $newcount - $oldcount;
+            for ($i = 0; $i < $tmp; $i++) {
+                DB::table('material')->insert(
+                    ['recipe_id' => $id,'material_master_id' => $arr[1][$oldcount + $i]]
+                );
             }
         }
+
+        // if ($files != NULL) {
+        //     foreach ($files as $file) {
+        //         $recipe_img = RecipeImg::find('recipe_id', $id)->first();
+        //         $extension = $file->getClientOriginalExtension();
+        //         $fileimg = Auth::user()->user_id . "_" . now()->format("YmdHis") . "_" . Str::random(4) . "." . $extension;
+        //         $filepath = public_path('upload/recipe-img/');
+        //         $file->move($filepath, $fileimg);
+        //         unlink($filepath . $recipe_img->recipe_img);
+        //         $recipe_img->recipe_id = $recipe->recipe_id;
+        //         $recipe_img->recipe_img = $fileimg;
+        //         $recipe_img->save();
+        //     }
+        // }
 
 
         return redirect()->action('PageController@getItemDetail', ['id' => $recipe->recipe_id]);

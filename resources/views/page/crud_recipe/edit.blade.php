@@ -12,7 +12,7 @@
             var intId = (lastField && lastField.length && lastField.data("idx") + 1) || 1;
             var fieldWrapper = $("<div class=\"city-item\" id=\"field" + intId + "\"/>");
             fieldWrapper.data("idx", intId);
-            var fName = $("<select id=\"sel\" required name=\"material[]\"><option value=\"0\">――――――調味料を選んでください――――――</option>@foreach($material_master as $material)<option value=\"{{$material->material_master_id}}\">{{$material->material_name}}</option>@endforeach</select>");
+            var fName = $("<select id=\"sel\" onchange=\"confirm(\'調味料を編集する？\')\" required name=\"material[]\"><option value=\"0\">――――――調味料を選んでください――――――</option>@foreach($material_master as $material)<option value=\"{{$material->material_master_id}}\">{{$material->material_name}}</option>@endforeach</select>");
             var removeButton = $("<input type=\"button\" class=\"remove\" value=\"-\" />");
             removeButton.click(function() {
                 $(this).parent().remove();
@@ -73,6 +73,9 @@
                 @endforeach
             </div>
         </div>
+        @if(session('material-error'))
+        <div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> {{session('material-error')}}</div>
+		@endif
         <input type="button" value="Add a field" class="add" id="add" />
         <div class="item">
             <label for="period">材料</label>
@@ -107,6 +110,9 @@
             </p>
             <input id="cv" type="file" name="fileimg[]" multiple />
         </div>
+        @if(session('img-error'))
+        <div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> {{session('img-error')}}</div>
+		@endif
         <input type="button" value="Add a field" class="add" id="add-img" />
 
         <div class="btn-block">
