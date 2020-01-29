@@ -6,10 +6,10 @@
     <hr>
     <div class="row">
         <select name="sort" onchange="location = this.value">
-            <option value="">Order</option>
-            <option value="{{ URL::to('/search') }}/?search={{$search}}&&sort=created_at_desc">Orderby Created time desc</option>
-            <option value="{{ URL::to('/search') }}/?search={{$search}}&&sort=created_at_asc">Order by Created time asc</option>
-            <option value="{{ URL::to('/search') }}/?search={{$search}}&&sort=like_desc">Order by Created time asc</option>
+            <option value="">ソート</option>
+            <option value="{{ URL::to('/search') }}/?search={{$search}}&&sort=created_at_desc">作成日時降順</option>
+            <option value="{{ URL::to('/search') }}/?search={{$search}}&&sort=created_at_asc">作成日時昇順</option>
+            <option value="{{ URL::to('/search') }}/?search={{$search}}&&sort=like_desc">人気</option>
         </select>
 
         <form method="get">
@@ -28,12 +28,12 @@
                 <a href="{{ URL::to('/itemdetail', $show_recipe->recipe_id) }}"><img class="card-img-top" src="upload/recipe-img/{{$show_recipe->recipes_img()->first()->recipe_img}}" alt=""></a>
                 <div class="card-body">
                     <h4 class="card-title">
-                        <a href="{{ URL::to('/itemdetail', $show_recipe->recipe_id) }}">{!! Str::replaceArray($search,["<span style='color:red;'>$search</span>"],$show_recipe->title) !!} </a>
+                        <a href="{{ URL::to('/itemdetail', $show_recipe->recipe_id) }}">{!! str_ireplace($search,"<span style='color:red;'>$search</span>",$show_recipe->title) !!} </a>
                     </h4>
                     <p class="card-text">
-                        {!! Str::replaceArray($search,["<span style='color:red;'>$search</span>"],$show_recipe->food_name) !!}
+                        {!! str_ireplace($search,"<span style='color:red;'>$search</span>",$show_recipe->food_name) !!}
                         <i class="far fa-clock" style='margin-left:20px'></i>
-                        <span style="font-size: 13px;"> {{$show_recipe->cook_time}}分ぐらい</span>
+                        <span style="font-size: 13px;"> {!! str_ireplace($search,"<span style='color:red;'>$search</span>",$show_recipe->cook_time) !!}分ぐらい</span>
                         <i class="fas fa-heart" style='margin-left:20px;color: red;'></i>
                         <span>{{count($show_recipe->likes->where('is_liked',1))}}</span>
                     </p>

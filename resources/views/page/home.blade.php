@@ -49,7 +49,8 @@
             <i class="fas fa-heart" style='margin-left:20px;color: red;'></i>
             <span>{{count($show_recipe->likes->where('is_liked',1))}}</span>
           </p>
-          <p style="font-size: 12px;"><span style="font-size: 20px;">{{$show_recipe->user()->first()->nickname}}</span> - {{$show_recipe->created_at->format('Y年m月d日、H時i分s秒')}}</p>
+          <span style="font-size: 20px;">{{mb_strimwidth($show_recipe->user()->first()->nickname, 0, 20, "...")}}</span>
+          <p style="font-size: 12px;">{{$show_recipe->created_at->format('Y年m月d日、H時i分s秒')}}</p>
         </div>
       </div>
     </div>

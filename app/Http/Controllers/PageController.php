@@ -11,6 +11,8 @@ use App\RecipeImg;
 use App\Comment;
 use App\User;
 use App\Liked;
+use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
@@ -32,7 +34,9 @@ class PageController extends Controller
                     $aa = Recipe::where('is_deleted', 0)->orderBy("created_at", "asc");
                     break;
                 case "like_desc":
-                    $aa = Recipe::where('is_deleted', 0)->orderBy("created_at", "desc");
+                    $aa = Recipe::where('is_deleted', 0)->withCount(['likes' => function (EloquentBuilder $query) {
+                        $query->where('is_liked', 1);
+                    }])->orderBy("likes_count", 'desc');
                     break;
             }
             $recipes = $aa->paginate(9)->appends('sort', $request->sort);
@@ -64,7 +68,9 @@ class PageController extends Controller
                     $aa = $recipe_avai->orderBy("created_at", "asc");
                     break;
                 case "like_desc":
-                    $aa = $recipe_avai->orderBy("created_at", "desc");
+                    $aa = Recipe::where('is_deleted', 0)->withCount(['likes' => function (EloquentBuilder $query) {
+                        $query->where('is_liked', 1);
+                    }])->orderBy("likes_count", 'desc');
                     break;
             }
             $recipes = $aa->paginate(9)->appends('sort', $request->sort);
@@ -75,14 +81,14 @@ class PageController extends Controller
     }
 
     //autocomplete
-    public function autocomplete(Request $request)
-    {
-        $search = $request->get('term');
+    // public function autocomplete(Request $request)
+    // {
+    //     $search = $request->get('term');
 
-        $result = Recipe::where('is_deleted', 0)->where("title", 'like', "%$search%")->get();
+    //     $result = Recipe::where('is_deleted', 0)->where("title", 'like', "%$search%")->get();
 
-        return response()->json($result);
-    }
+    //     return response()->json($result);
+    // }
 
 
     public function getRegister()
@@ -180,7 +186,8 @@ class PageController extends Controller
         //dd($recipe_likes->where('is_liked', 1)); 
         // get user who created recipe for getting info
         $recipe_user = Recipe::find($request->id)->user()->first();
-        return view('page.itemdetail', compact('recipe_material', 'recipe', 'recipe_imgs', 'recipe_user', 'recipe_likes'));
+        $recipe_comments = $recipe->comments()->orderBy('created_at', 'DESC')->get();
+        return view('page.itemdetail', compact('recipe_material', 'recipe', 'recipe_imgs', 'recipe_user', 'recipe_likes', 'recipe_comments'));
     }
 
     public function postComment($id, Request $request)
@@ -339,31 +346,29 @@ class PageController extends Controller
     }
     public function postEditRecipe($id, Request $request)
     {
-        // $validatedData = $request->validate([
-        //     'title' => 'required|max:25',
-        //     'food_name' => 'required|max:25',
-        //     'cook_time' => 'required|max:4',
-        //     'food_material' => 'required|max:255',
-        //     'serving_for' => 'required|max:2',
-        //     'direction' => 'required|max:1000',
-        //     'material' => 'required|array',
-        //     'fileimg' => 'required',
-        // ], [
-        //     'title.required' => 'タイトルを入力してください',
-        //     'title.max' => 'タイトルは、25文字の間で設定する必要があります',
-        //     'food_name.required' => '料理名を入力してください',
-        //     'food_name.max' => '料理名は、25文字の間で設定する必要があります',
-        //     'cook_time.required' => '作り時間を入力してください',
-        //     'cook_time.max' => '作り時間は、1-999の間で設定する必要があります',
-        //     'food_material.required' => '材料を入力してください',
-        //     'food_material.max' => '材料は、255文字の間で設定する必要があります',
-        //     'serving_for.required' => '何人前を入力してください',
-        //     'serving_for.max' => '何人前は、1-99の間で設定する必要があります',
-        //     'direction.required' => '作り方を入力してください',
-        //     'direction.max' => '作り方は、1000文字の間で設定する必要があります',
-        //     'fileimg.required' => 'レシピの写真を入力してください',
-        //     'fileimg.mimes' => 'アップロードしたファイルは写真の形式ではない',
-        // ]);
+        $validatedData = $request->validate([
+            'title' => 'required|max:25',
+            'food_name' => 'required|max:25',
+            'cook_time' => 'required|max:4',
+            'food_material' => 'required|max:255',
+            'serving_for' => 'required|max:2',
+            'direction' => 'required|max:1000',
+        ], [
+            'title.required' => 'タイトルを入力してください',
+            'title.max' => 'タイトルは、25文字の間で設定する必要があります',
+            'food_name.required' => '料理名を入力してください',
+            'food_name.max' => '料理名は、25文字の間で設定する必要があります',
+            'cook_time.required' => '作り時間を入力してください',
+            'cook_time.max' => '作り時間は、1-999の間で設定する必要があります',
+            'food_material.required' => '材料を入力してください',
+            'food_material.max' => '材料は、255文字の間で設定する必要があります',
+            'serving_for.required' => '何人前を入力してください',
+            'serving_for.max' => '何人前は、1-99の間で設定する必要があります',
+            'direction.required' => '作り方を入力してください',
+            'direction.max' => '作り方は、1000文字の間で設定する必要があります',
+            // 'fileimg.required' => 'レシピの写真を入力してください',
+            // 'fileimg.mimes' => 'アップロードしたファイルは写真の形式ではない',
+        ]);
         $list_extension = ['jpeg', 'jpg', 'jpe', 'png', 'svg', 'webp'];
         $files = $request->file('fileimg');
         if ($files != NULL) {
@@ -432,10 +437,18 @@ class PageController extends Controller
             $newimgcount = count($newimg);
             $oldimgcount = count($oldimg);
             $arrfile = [$oldimg, $newimg];
+            $filepath = public_path('upload/recipe-img/');
             if ($newimgcount <= $oldimgcount) { //update
                 for ($i = 0; $i < $newimgcount; $i++) {
                     $test = DB::table('recipe_img')->where('recipe_id', $id)->where('recipe_img', $arrfile[0][$i])->update(['recipe_img' => $arrfile[1][$i]]);
-                    $filepath = public_path('upload/recipe-img/');
+                    $file->move($filepath, $arrfile[1][$i]);
+                }
+            } else { //create new
+                $tmp = $newimgcount - $oldimgcount;
+                for ($i = 0; $i < $tmp; $i++) {
+                    DB::table('recipe_img')->insert(
+                        ['recipe_id' => $id, 'recipe_img' => $arr[1][$oldimgcount + $i]]
+                    );
                     $file->move($filepath, $arrfile[1][$i]);
                 }
             }

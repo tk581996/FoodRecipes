@@ -24,6 +24,15 @@
 </style>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 @endpush
+@push("scripts")
+  <script>
+    function likedisable(link) {
+      link.onclick = function(event) {
+        event.preventDefault();
+      }
+    }
+  </script>
+@endpush
 <!-- Page Content -->
 <div class="container">
 
@@ -36,7 +45,7 @@
       @else
       <!-- hoac neu nguoi dug chua co id trong bang liked thi create liked -->
       @if((count($recipe_likes->where('user_id',Auth::id()))) == 0)
-      <a href="like/{{$recipe->recipe_id}}" style="color: red;"><i class="far fa-heart"></i></a>
+      <a href="like/{{$recipe->recipe_id}}" onclick="likedisable(this);" style="color: red;"><i class="far fa-heart"></i></a>
       @endif
       @endif
 
@@ -99,11 +108,11 @@
           @foreach($recipe_imgs as $recipe_img)
           @if($loop->first)
           <div class="carousel-item active">
-            <img src="../upload/recipe-img/{{$recipe_img->recipe_img}}" style="height:490px;">
+            <img src="../upload/recipe-img/{{$recipe_img->recipe_img}}" height="490px" width="735px">
           </div>
           @else
           <div class="carousel-item">
-            <img src="../upload/recipe-img/{{$recipe_img->recipe_img}}" style="height:490px;">
+            <img src="../upload/recipe-img/{{$recipe_img->recipe_img}}" height="490px" width="735px">
           </div>
           @endif
           @endforeach
@@ -150,7 +159,7 @@
       @endif
 
       <!-- Single Comment -->
-      @foreach($recipe->comments as $comment)
+      @foreach($recipe_comments as $comment)
       @if($comment->is_deleted == 0)
       <div class="media mb-4">
         <div class="media-body">

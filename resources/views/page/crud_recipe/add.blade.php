@@ -32,31 +32,31 @@
             <h1>レシピ追加</h1>
         </div>
         <div class="item">
-            <label for="apply">投稿タイトル</label>
-            <input id="apply" class="@error('title') is-invalid @enderror" type="text" name="title" />
+            <label>投稿タイトル</label>
+            <input class="@error('title') is-invalid @enderror" type="text" name="title" />
         </div>
         @error('title')
         <div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> {{ $message }}</div>
         @enderror
 
         <div class="item">
-            <label for="period">料理名</label>
-            <input id="period" class="@error('food_name') is-invalid @enderror" type="text" name="food_name" />
+            <label>料理名</label>
+            <input class="@error('food_name') is-invalid @enderror" type="text" name="food_name" />
         </div>
         @error('food_name')
         <div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> {{ $message }}</div>
         @enderror
 
         <div class="item">
-            <label for="period">作り時間</label>
-            <input id="period" class="@error('cook_time') is-invalid @enderror" type="number" name="cook_time" min='0' max='9999' />
+            <label>作り時間</label>
+            <input class="@error('cook_time') is-invalid @enderror" type="number" name="cook_time" min='0' max='9999' />
         </div>
         @error('cook_time')
         <div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> {{ $message }}</div>
         @enderror
 
         <div class="item" id="buildyourform">
-            <label for="period">調味料</label>
+            <label>調味料</label>
             <div class="city-item">
                 <select name="material[]" class="@error('material') is-invalid @enderror" required>
                     <option value="0">――――――調味料を選んでください――――――</option>
@@ -75,7 +75,7 @@
         <input type="button" value="調味料を追加" class="add" id="add" />
 
         <div class="item">
-            <label for="period">材料</label>
+            <label>材料</label>
             <textarea type="text" class="@error('food_material') is-invalid @enderror" name="food_material"></textarea>
         </div>
         @error('food_material')
@@ -83,15 +83,15 @@
         @enderror
 
         <div class="item">
-            <label for="period">何人前</label>
-            <input id="period" class="@error('serving_for') is-invalid @enderror" type="number" name="serving_for" min='1' max='100' />
+            <label >何人前</label>
+            <input class="@error('serving_for') is-invalid @enderror" type="number" name="serving_for" min='1' max='100' />
         </div>
         @error('serving_for')
         <div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> {{ $message }}</div>
         @enderror
 
         <div class="item">
-            <label for="period">作り方</label>
+            <label>作り方</label>
             <textarea type="text" class="@error('direction') is-invalid @enderror" name="direction" rows="3"></textarea>
         </div>
         @error('direction')
@@ -99,7 +99,7 @@
         @enderror
 
         <div class="item" id="img">
-            <label for="cv">レシピ写真<span>*</span></label>
+            <label>レシピ写真<span>*</span></label>
             <input id="cv" class="@error('fileimg') is-invalid @enderror" type="file" name="fileimg[]" multiple />
         </div>
         @if(session('img-error'))
