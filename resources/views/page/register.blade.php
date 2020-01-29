@@ -55,6 +55,7 @@
 						アカウントを作成
 					</button>
 				</div>
+				<a href="{{ URL::to('login') }}" style="margin-top:10px">ログイン</a>
 				{{ csrf_field() }}
 			</form>
 		</div>

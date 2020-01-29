@@ -53,6 +53,8 @@
 						ログイン
 					</button>
 				</div>
+				<a href="{{ URL::to('register') }}" style="margin-top:10px">アカウント新規登録</a>
+
 				{{ csrf_field() }}
 			</form>
 		</div>

@@ -7,6 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
+  <link rel="icon" type="image/png" href="http://icons.iconarchive.com/icons/webalys/kameleon.pics/512/Food-Dome-icon.png">
 
   <title>FoodRecipes</title>
   <!-- Main css -->

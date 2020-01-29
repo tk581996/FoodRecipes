@@ -31,13 +31,13 @@
   <h1 class="mt-4 mb-3">{{$recipe->title}}
     <small>
       <!-- neu chua dang nhap thi hien thi tim khong mau -->
-      @if(Auth::guest()) 
+      @if(Auth::guest())
       <a href="{{ URL::to('/login')}}" style="color: red;"><i class="far fa-heart"></i></a>
-      @else 
+      @else
       <!-- hoac neu nguoi dug chua co id trong bang liked thi create liked -->
-        @if((count($recipe_likes->where('user_id',Auth::id()))) == 0)
-        <a href="like/{{$recipe->recipe_id}}" style="color: red;"><i class="far fa-heart"></i></a>
-        @endif
+      @if((count($recipe_likes->where('user_id',Auth::id()))) == 0)
+      <a href="like/{{$recipe->recipe_id}}" style="color: red;"><i class="far fa-heart"></i></a>
+      @endif
       @endif
 
       @foreach($recipe_likes->where('is_liked',1) as $like)
@@ -56,10 +56,10 @@
 
       {{count($recipe_likes->where('is_liked',1))}}
     </small>
-    @if(Auth::check() && Auth::user()->user_id == $recipe->user_id) 
+    @if(Auth::check() && Auth::user()->user_id == $recipe->user_id)
     <div class="float-right">
       <a href="{{ url('/inputform/edit/'.$recipe->recipe_id) }}" class="btn btn-success">編集</a>
-      <a href="{{ url('/inputform/delete/'.$recipe->recipe_id) }}"  onclick="return confirm('本当に削除？');" class="btn btn-danger">削除</a>
+      <a href="{{ url('/inputform/delete/'.$recipe->recipe_id) }}" onclick="return confirm('本当に削除？');" class="btn btn-danger">削除</a>
     </div>
     @endif
   </h1>
@@ -88,9 +88,8 @@
       <!-- Carousel Image -->
       <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
         <ol class="carousel-indicators">
-          @for($i=0;$i< count($recipe_imgs);$i++) 
-            @if ($i==0) 
-            <li data-target="#carouselExampleIndicators" data-slide-to="{{$i}}" class="active"></li>
+          @for($i=0;$i< count($recipe_imgs);$i++) @if ($i==0) <li data-target="#carouselExampleIndicators" data-slide-to="{{$i}}" class="active">
+            </li>
             @else
             <li data-target="#carouselExampleIndicators" data-slide-to="{{$i}}"></li>
             @endif
@@ -123,24 +122,24 @@
       <h2>作り方</h2>
       <hr>
       <!-- Post Content -->
-      <p>
-        @foreach(explode('。', $recipe->direction) as $direction)
-        <option>{{ $direction }}</option>
-        @endforeach
-      </p>
+
+      @foreach(explode('。', $recipe->direction) as $direction)
+      <p>{{ $direction }}</p>
+      @endforeach
+
 
       <hr>
 
       <!-- Comments Form -->
       @if(Auth::check())
       <div class="card my-4">
-        <h5 class="card-header">Leave a Comment:</h5>
+        <h5 class="card-header">コメントしてください：</h5>
         <div class="card-body">
           <form method="post" action="comment/{{$recipe->recipe_id}}">
             <div class="form-group">
-              <textarea class="form-control" rows="3" name="content"></textarea>
+              <textarea class="form-control" onkeyup="success()" id="textsend" rows="3" name="content"></textarea>
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" id="button" class="btn btn-primary" disabled>コメント</button>
             {{ csrf_field() }}
           </form>
         </div>
@@ -210,12 +209,10 @@
         <h5 class="card-header">材料（{{$recipe->serving_for}}人前）</h5>
         <div class="card-body">
           <div class="row">
-            <div class="col-lg-8">
-              <p>
+            <div class="col-lg-12">
                 @foreach(explode(',', $recipe->food_material) as $info)
-                <option>{{ $info }}</option>
+                <p>・{{ $info }}<p>
                 @endforeach
-              </p>
             </div>
           </div>
         </div>
@@ -233,8 +230,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 <script>
-  function Delete(){
-    alert("vkl");
+  function success() {
+    var str = document.getElementById("textsend").value;
+    if (str === "" || !$("#textsend").val().trim().length) {
+      document.getElementById('button').disabled = true;
+    } else {
+      document.getElementById('button').disabled = false;
+    }
   }
 </script>
 @endpush

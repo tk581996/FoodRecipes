@@ -13,8 +13,8 @@
         </select>
 
         <form method="get">
-            <input type="text" placeholder="検索" name="search">
-            <button type="submit" hidden>Submit</button>
+            <input type="text" id="textsend" onkeyup="success()" placeholder="検索" name="search">
+            <button type="submit" id="button" disabled hidden>Submit</button>
         </form>
     </div>
 
@@ -48,4 +48,17 @@
     <hr>
 
 </div>
+
+@push('scripts')
+<script>
+  function success() {
+    var str = document.getElementById("textsend").value;
+    if (str === "" || !$("#textsend").val().trim().length) {
+      document.getElementById('button').disabled = true;
+    } else {
+      document.getElementById('button').disabled = false;
+    }
+  }
+</script>
+@endpush
 @endsection

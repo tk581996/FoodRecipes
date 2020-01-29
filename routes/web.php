@@ -11,6 +11,7 @@
 |
 */
 
+Route::get('/', 'PageController@getIndex');
 Route::get('/index', 'PageController@getIndex');
 
 Route::post('/search', 'PageController@postSearch');

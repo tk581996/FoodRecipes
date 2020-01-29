@@ -366,10 +366,12 @@ class PageController extends Controller
         // ]);
         $list_extension = ['jpeg', 'jpg', 'jpe', 'png', 'svg', 'webp'];
         $files = $request->file('fileimg');
-        foreach ($files as $file) {
-            $extension = $file->getClientOriginalExtension();
-            if (in_array($extension, $list_extension) == false) {
-                return back()->with('img-error', 'アップロードしたファイルは写真の形式ではない。');
+        if ($files != NULL) {
+            foreach ($files as $file) {
+                $extension = $file->getClientOriginalExtension();
+                if (in_array($extension, $list_extension) == false) {
+                    return back()->with('img-error', 'アップロードしたファイルは写真の形式ではない。');
+                }
             }
         }
 
@@ -430,7 +432,6 @@ class PageController extends Controller
             $newimgcount = count($newimg);
             $oldimgcount = count($oldimg);
             $arrfile = [$oldimg, $newimg];
-            dd($arrfile);
             if ($newimgcount <= $oldimgcount) { //update
                 for ($i = 0; $i < $newimgcount; $i++) {
                     $test = DB::table('recipe_img')->where('recipe_id', $id)->where('recipe_img', $arrfile[0][$i])->update(['recipe_img' => $arrfile[1][$i]]);

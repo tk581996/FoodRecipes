@@ -106,10 +106,10 @@
             <p>
                 @foreach($recipe_imgs as $img)
                 <img height="130px" src="../../upload/recipe-img/{{$img->recipe_img}}">
-                <input type="file" name="fileimg[]" multiple />
                 <input hidden name="oldfileimg[]" value="{{$img->recipe_img}}" />
                 @endforeach
             </p>
+            <input type="file" name="fileimg[]" multiple />
         </div>
         @if(session('img-error'))
         <div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> {{session('img-error')}}</div>
