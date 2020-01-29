@@ -279,15 +279,16 @@ class PageController extends Controller
         //check neu trug gia vi
         $master_materials = $request->material;
         $exist = [];
-        if ($master_materials[0] == '0') {
-            return redirect('inputform')->with('material-error', '調味料の選んでください。');
-        } else {
-            foreach ($master_materials as $master_material) {
-                if (in_array($master_material, $exist) == false) {
-                    array_push($exist, $master_material);
-                } else {
-                    return redirect('inputform')->with('material-error', '調味料の選びは重複できません。');
-                }
+        for ($i = 0; $i < count($master_materials); $i++) {
+            if ($master_materials[$i] == '0') {
+                return redirect('inputform')->with('material-error', '調味料の選んでください。');
+            }
+        }
+        foreach ($master_materials as $master_material) {
+            if (in_array($master_material, $exist) == false) {
+                array_push($exist, $master_material);
+            } else {
+                return redirect('inputform')->with('material-error', '調味料の選びは重複できません。');
             }
         }
 
@@ -363,27 +364,28 @@ class PageController extends Controller
         //     'fileimg.required' => 'レシピの写真を入力してください',
         //     'fileimg.mimes' => 'アップロードしたファイルは写真の形式ではない',
         // ]);
-        // $list_extension = ['jpeg', 'jpg', 'jpe', 'png', 'svg', 'webp'];
-        // $files = $request->file('fileimg');
-        // foreach ($files as $file) {
-        //     $extension = $file->getClientOriginalExtension();
-        //     if (in_array($extension, $list_extension) == false) {
-        //         return back()->with('img-error', 'アップロードしたファイルは写真の形式ではない。');
-        //     }
-        // }
+        $list_extension = ['jpeg', 'jpg', 'jpe', 'png', 'svg', 'webp'];
+        $files = $request->file('fileimg');
+        foreach ($files as $file) {
+            $extension = $file->getClientOriginalExtension();
+            if (in_array($extension, $list_extension) == false) {
+                return back()->with('img-error', 'アップロードしたファイルは写真の形式ではない。');
+            }
+        }
 
         //check neu trug gia vi
         $master_materials = $request->material;
         $exist = [];
-        if ($master_materials[0] == '0') {
-            return redirect('inputform')->with('material-error', '調味料の選んでください。');
-        } else {
-            foreach ($master_materials as $master_material) {
-                if (in_array($master_material, $exist) == false) {
-                    array_push($exist, $master_material);
-                } else {
-                    return back()->with('material-error', '調味料の選びは重複できません。');
-                }
+        for ($i = 0; $i < count($master_materials); $i++) {
+            if ($master_materials[$i] == '0') {
+                return redirect('inputform')->with('material-error', '調味料の選んでください。');
+            }
+        }
+        foreach ($master_materials as $master_material) {
+            if (in_array($master_material, $exist) == false) {
+                array_push($exist, $master_material);
+            } else {
+                return redirect('inputform')->with('material-error', '調味料の選びは重複できません。');
             }
         }
 
@@ -412,24 +414,31 @@ class PageController extends Controller
             $tmp = $newcount - $oldcount;
             for ($i = 0; $i < $tmp; $i++) {
                 DB::table('material')->insert(
-                    ['recipe_id' => $id,'material_master_id' => $arr[1][$oldcount + $i]]
+                    ['recipe_id' => $id, 'material_master_id' => $arr[1][$oldcount + $i]]
                 );
             }
         }
 
-        // if ($files != NULL) {
-        //     foreach ($files as $file) {
-        //         $recipe_img = RecipeImg::find('recipe_id', $id)->first();
-        //         $extension = $file->getClientOriginalExtension();
-        //         $fileimg = Auth::user()->user_id . "_" . now()->format("YmdHis") . "_" . Str::random(4) . "." . $extension;
-        //         $filepath = public_path('upload/recipe-img/');
-        //         $file->move($filepath, $fileimg);
-        //         unlink($filepath . $recipe_img->recipe_img);
-        //         $recipe_img->recipe_id = $recipe->recipe_id;
-        //         $recipe_img->recipe_img = $fileimg;
-        //         $recipe_img->save();
-        //     }
-        // }
+        $oldimg = $request->oldfileimg;
+        $newimg = [];
+        if ($files != NULL) {
+            foreach ($files as $file) {
+                $extension = $file->getClientOriginalExtension();
+                $fileimg = Auth::user()->user_id . "_" . now()->format("YmdHis") . "_" . Str::random(4) . "." . $extension;
+                array_push($newimg, $fileimg);
+            }
+            $newimgcount = count($newimg);
+            $oldimgcount = count($oldimg);
+            $arrfile = [$oldimg, $newimg];
+            dd($arrfile);
+            if ($newimgcount <= $oldimgcount) { //update
+                for ($i = 0; $i < $newimgcount; $i++) {
+                    $test = DB::table('recipe_img')->where('recipe_id', $id)->where('recipe_img', $arrfile[0][$i])->update(['recipe_img' => $arrfile[1][$i]]);
+                    $filepath = public_path('upload/recipe-img/');
+                    $file->move($filepath, $arrfile[1][$i]);
+                }
+            }
+        }
 
 
         return redirect()->action('PageController@getItemDetail', ['id' => $recipe->recipe_id]);

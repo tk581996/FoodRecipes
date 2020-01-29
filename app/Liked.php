@@ -8,6 +8,9 @@ class Liked extends Model
 {
     protected $table = "liked";
     protected $primaryKey = "liked_id";
+    protected $fillable = [
+        'user_id'
+    ];
 
     public function user()
     {

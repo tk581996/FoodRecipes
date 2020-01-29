@@ -76,7 +76,7 @@
         @if(session('material-error'))
         <div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> {{session('material-error')}}</div>
 		@endif
-        <input type="button" value="Add a field" class="add" id="add" />
+        <input type="button" value="調味料を追加" class="add" id="add" />
         <div class="item">
             <label for="period">材料</label>
             <textarea type="text" class="@error('food_material') is-invalid @enderror" name="food_material">{{$recipe->food_material}}</textarea>
@@ -106,14 +106,15 @@
             <p>
                 @foreach($recipe_imgs as $img)
                 <img height="130px" src="../../upload/recipe-img/{{$img->recipe_img}}">
+                <input type="file" name="fileimg[]" multiple />
+                <input hidden name="oldfileimg[]" value="{{$img->recipe_img}}" />
                 @endforeach
             </p>
-            <input id="cv" type="file" name="fileimg[]" multiple />
         </div>
         @if(session('img-error'))
         <div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> {{session('img-error')}}</div>
 		@endif
-        <input type="button" value="Add a field" class="add" id="add-img" />
+        <input type="button" value="レシピ写真を追加" class="add" id="add-img" />
 
         <div class="btn-block">
             <button type="submit" href="/">編集</button>
