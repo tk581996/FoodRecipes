@@ -24,6 +24,7 @@ html {
   height: 100%;
 }
 a {
+  font-family: Poppins-Regular;
   font-size: 14px;
   line-height: 1.7;
   color: #666666;
@@ -145,6 +146,7 @@ iframe {
   border: none !important;
 }
 .txt1 {
+  font-family: Poppins-Regular;
   font-size: 13px;
   line-height: 1.4;
   color: #999999;
@@ -192,6 +194,7 @@ iframe {
   padding: 70px 15px 74px 15px;
 }
 .login100-form-title-1 {
+  font-family: Poppins-Bold;
   font-size: 30px;
   color: #fff;
   text-transform: uppercase;
@@ -236,6 +239,7 @@ iframe {
   width: 100px;
 }
 .input100 {
+  font-family: Poppins-Regular;
   font-size: 15px;
   color: #555555;
   line-height: 1.2;
@@ -280,6 +284,7 @@ input.input100 {
   display: none;
 }
 .label-checkbox100 {
+  font-family: Poppins-Regular;
   font-size: 13px;
   color: #999999;
   line-height: 1.4;
@@ -335,11 +340,11 @@ input.input100 {
   justify-content: center;
   align-items: center;
   padding: 0 20px;
-  margin-top: 30px;
   min-width: 160px;
   height: 50px;
   background-color: #57b846;
   border-radius: 25px;
+  font-family: Poppins-Regular;
   font-size: 16px;
   color: #fff;
   line-height: 1.2;
@@ -350,7 +355,6 @@ input.input100 {
 }
 .login100-form-btn:hover {
   background-color: #333333;
-  min-width: 280px;
 }
 @media (max-width: 576px) {
   .login100-form {

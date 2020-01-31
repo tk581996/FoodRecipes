@@ -46,6 +46,21 @@ class PageController extends Controller
         return view('page.home', compact('recipes'));
     }
 
+    public function autocomplete(Request $request)
+    {
+        if ($request->get('query')) {
+            $query = $request->get('query');
+            $data = DB::table('recipe')
+                ->where('title', 'LIKE', "%{$query}%")->orWhere("food_name", "like", "%$query%")->orWhere("cook_time", "like", "%$query%")
+                ->get();
+            $output = '<ul class="dropdown-menu autocomplete-search" style="display:block">';
+            foreach ($data as $row) {
+                $output .= '<li>' . str_ireplace($query,"<span style='color:red;'>$query</span>",$row->title) . '</li>';
+            }
+            $output .= '</ul>';
+            echo $output;
+        }
+    }
     //Search
     public function postSearch(Request $request)
     {
@@ -79,17 +94,6 @@ class PageController extends Controller
         }
         return view('page.search', compact('recipes', 'search'));
     }
-
-    //autocomplete
-    // public function autocomplete(Request $request)
-    // {
-    //     $search = $request->get('term');
-
-    //     $result = Recipe::where('is_deleted', 0)->where("title", 'like', "%$search%")->get();
-
-    //     return response()->json($result);
-    // }
-
 
     public function getRegister()
     {
@@ -270,17 +274,21 @@ class PageController extends Controller
             'direction.required' => '作り方を入力してください',
             'direction.max' => '作り方は、1000文字の間で設定する必要があります',
             'fileimg.required' => 'レシピの写真を入力してください',
-            'fileimg.mimes' => 'アップロードしたファイルは写真の形式ではない',
+            'fileimg.size' => 'アップロードしたファイルは2048kBを超える',
         ]);
 
         //check neu anh khong dung dinh dang
         $list_extension = ['jpeg', 'jpg', 'jpe', 'png', 'svg', 'webp'];
         $files = $request->file('fileimg');
         foreach ($files as $file) {
+            $size = $file->getSize();
             $extension = $file->getClientOriginalExtension();
             if (in_array($extension, $list_extension) == false) {
                 return redirect('inputform')->with('img-error', 'アップロードしたファイルは写真の形式ではない。');
+            } elseif($size >= 2097152 || $size==false){
+                return redirect('inputform')->with('img-error', 'アップロードしたファイルは2048kBを超える。');
             }
+            
         }
 
         //check neu trug gia vi
@@ -366,8 +374,6 @@ class PageController extends Controller
             'serving_for.max' => '何人前は、1-99の間で設定する必要があります',
             'direction.required' => '作り方を入力してください',
             'direction.max' => '作り方は、1000文字の間で設定する必要があります',
-            // 'fileimg.required' => 'レシピの写真を入力してください',
-            // 'fileimg.mimes' => 'アップロードしたファイルは写真の形式ではない',
         ]);
         $list_extension = ['jpeg', 'jpg', 'jpe', 'png', 'svg', 'webp'];
         $files = $request->file('fileimg');

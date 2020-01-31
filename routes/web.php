@@ -13,10 +13,10 @@
 
 Route::get('/', 'PageController@getIndex');
 Route::get('/index', 'PageController@getIndex');
+Route::post('/index/autocomplete', 'PageController@autocomplete');
 
 Route::post('/search', 'PageController@postSearch');
 Route::get('/search', 'PageController@getSearch');
-Route::get('/autocomplete', 'PageController@autocomplete');
 
 Route::get('/login', 'PageController@getLogin');
 Route::post('/login', 'PageController@postLogin');

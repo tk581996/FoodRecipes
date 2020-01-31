@@ -11,24 +11,60 @@
       document.getElementById('button').disabled = false;
     }
   }
+
+  //search autocomplete
+  $(document).ready(function() {
+    $('#textsend').keyup(function() {
+      var query = $(this).val();
+      if (query != '') {
+        var _token = $('input[name="_token"]').val();
+        $.ajax({
+          url: "{{ url('/index/autocomplete') }}",
+          method: "POST",
+          data: {
+            query: query,
+            _token: _token //pass csrf
+          },
+          success: function(data) {
+            $('#searchList').fadeIn();
+            $('#searchList').html(data);
+          }
+        });
+      } else {
+        $('#searchList').fadeOut();
+      }
+    });
+    $(document).on('click', 'li', function() {
+      $('#textsend').val($(this).text());
+      $('#searchList').fadeOut();
+    }); // can pick tag <li> in hint list
+    $('#textsend').blur(function() {
+      $('#searchList').fadeOut();
+      // hive searchlist when blur
+    });
+  });
 </script>
 @endpush
 @include("../header")
 <div class="container">
   <hr>
-  <div class="row">
-    <select name="sort" onchange="location = this.value">
-      <option value="">ソート</option>
-      <option value="{{ URL::to('/index') }}/?sort=created_at_desc">作成日時降順</option>
-      <option value="{{ URL::to('/index') }}/?sort=created_at_asc">作成日時昇順</option>
-      <option value="{{ URL::to('/index') }}/?sort=like_desc">人気</option>
-    </select>
-
-    <form method="post" action="search">
-      @csrf
-      <input type="text" id="textsend" onkeyup="success()" placeholder="検索" name="search">
-      <button type="submit" id="button" disabled hidden>Submit</button>
-    </form>
+  <div class="row justify-content-end">
+    <div class="col-6">
+      <form method="post" action="search">
+        @csrf
+        <input type="text" id="textsend" autocomplete="off" onkeyup="success()" placeholder="検索" name="search">
+        <div id="searchList"></div>
+        <button type="submit" id="button" disabled hidden>Submit</button>
+      </form>
+    </div>
+    <div class="col-2">
+      <select name="sort" class="sort" onchange="location = this.value">
+        <option>ソート</option>
+        <option value="{{ URL::to('/index') }}/?sort=created_at_desc">作成日時降順</option>
+        <option value="{{ URL::to('/index') }}/?sort=created_at_asc">作成日時昇順</option>
+        <option value="{{ URL::to('/index') }}/?sort=like_desc">人気</option>
+      </select>
+    </div>
   </div>
 
   <hr>

@@ -146,7 +146,7 @@
         <div class="card-body">
           <form method="post" action="comment/{{$recipe->recipe_id}}">
             <div class="form-group">
-              <textarea class="form-control" onkeyup="success()" id="textsend" rows="3" name="content"></textarea>
+              <textarea class="form-control" onkeyup="success()" id="commentsend" rows="3" name="content"></textarea>
             </div>
             <button type="submit" id="button" class="btn btn-primary" disabled>コメント</button>
             {{ csrf_field() }}
@@ -165,7 +165,7 @@
         <div class="media-body">
           <h5 class="mt-0">
             {{$comment->user->nickname}}
-            <small style="font-size: 13px;">{{$comment->created_at->format('Y年m月d日、h:m:s')}}</small>
+            <small style="font-size: 13px;">{{$comment->created_at->format('Y年m月d日、H:i:s')}}</small>
             @if(Auth::check() && Auth::user()->user_id == $comment->user_id)
             <a href="comment/delete/{{$comment->comment_id}}" onclick="return confirm('本当に削除？');" class="btn btn-danger">削除</a>
             @endif
@@ -240,8 +240,8 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 <script>
   function success() {
-    var str = document.getElementById("textsend").value;
-    if (str === "" || !$("#textsend").val().trim().length) {
+    var str = document.getElementById("commentsend").value;
+    if (str === "" || !$("#commentsend").val().trim().length) {
       document.getElementById('button').disabled = true;
     } else {
       document.getElementById('button').disabled = false;
