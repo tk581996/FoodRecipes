@@ -142,13 +142,13 @@
       <!-- Comments Form -->
       @if(Auth::check())
       <div class="card my-4">
-        <h5 class="card-header">コメントしてください：</h5>
+        <h5 class="card-header">コメント：</h5>
         <div class="card-body">
           <form method="post" action="comment/{{$recipe->recipe_id}}">
             <div class="form-group">
               <textarea class="form-control" onkeyup="success()" id="commentsend" rows="3" name="content"></textarea>
             </div>
-            <button type="submit" id="button" class="btn btn-primary" disabled>コメント</button>
+            <button type="submit" id="button" class="btn btn-primary" disabled>投稿</button>
             {{ csrf_field() }}
           </form>
         </div>

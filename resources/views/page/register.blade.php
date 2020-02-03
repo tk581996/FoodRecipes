@@ -11,7 +11,7 @@
 		<div class="wrap-login100">
 			<div class="login100-form-title" style="background-image: url(https://mirai-image.jp/wp-content/uploads/2020/01/3d4761e2371f555c046cbd32f6f6d955-1-800x480.png);">
 				<span class="login100-form-title-1">
-					ユーザー新規登録
+					サインアップ
 				</span>
 			</div>
 
@@ -42,7 +42,7 @@
 				@enderror 
                 
                 <div class="wrap-input100 validate-input m-b-18" data-validate="パスワードが必須">
-					<span class="label-input100">もう一度パスワードを入力してください</span>
+					<span class="label-input100">もう一度<br>パスワード</span>
 					<input class="input100 @error('repassword') is-invalid @enderror" type="password" name="repassword" placeholder="パスワードを入力">
 					<span class="focus-input100"></span>
 				</div>
@@ -52,7 +52,7 @@
 				
 				<div class="container-login100-form-btn">
 					<button type="submit" class="login100-form-btn">
-						アカウントを作成
+						登録
 					</button>
 				</div>
 				<a href="{{ URL::to('login') }}" style="margin-top:10px">ログイン</a>

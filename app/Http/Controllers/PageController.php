@@ -51,11 +51,15 @@ class PageController extends Controller
         if ($request->get('query')) {
             $query = $request->get('query');
             $data = DB::table('recipe')
-                ->where('title', 'LIKE', "%{$query}%")->orWhere("food_name", "like", "%$query%")->orWhere("cook_time", "like", "%$query%")
-                ->get();
+                ->where('is_deleted', '=', 0)
+                ->where(function ($xxx) use($query) {
+                    $xxx->where('title', 'LIKE', "%$query%")
+                        ->orWhere('food_name', 'LIKE', "%$query%")
+                        ->orWhere('cook_time', 'LIKE', "%$query%");
+                })->get();
             $output = '<ul class="dropdown-menu autocomplete-search" style="display:block">';
             foreach ($data as $row) {
-                $output .= '<li>' . str_ireplace($query,"<span style='color:red;'>$query</span>",$row->title) . '</li>';
+                $output .= '<li>' . str_ireplace($query, "<span style='color:red;'>$query</span>", $row->title) . '</li>';
             }
             $output .= '</ul>';
             echo $output;
@@ -283,12 +287,12 @@ class PageController extends Controller
         foreach ($files as $file) {
             $size = $file->getSize();
             $extension = $file->getClientOriginalExtension();
+            dd($extension);
             if (in_array($extension, $list_extension) == false) {
                 return redirect('inputform')->with('img-error', 'アップロードしたファイルは写真の形式ではない。');
-            } elseif($size >= 2097152 || $size==false){
+            } elseif ($size >= 2097152 || $size == false) {
                 return redirect('inputform')->with('img-error', 'アップロードしたファイルは2048kBを超える。');
             }
-            
         }
 
         //check neu trug gia vi

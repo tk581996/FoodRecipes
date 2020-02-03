@@ -22,6 +22,19 @@
             $("#buildyourform").append(fieldWrapper);
         });
     });
+
+    $(document).ready(function() {
+        $('input[type="file"]').change(function(event) {
+            var fileSize = this.files[0].size;
+            var maxAllowedSize = 2097152;
+                // check the file size if its greater than requirement
+                if (fileSize > maxAllowedSize) {
+                    alert('写真サイズは2048kBを超える。より小さい写真サイズをアップロードしてください。');
+                    this.val('');
+                }
+
+        });
+    });
 </script>
 @endpush
 <div class="testbox">
@@ -102,7 +115,7 @@
         @enderror
 
         <div class="item" id="img">
-            <label for="cv">レシピ写真<span>*</span></label>
+            <label for="cv">レシピ写真</label>
             <p>
                 @foreach($recipe_imgs as $img)
                 <img height="130px" src="../../upload/recipe-img/{{$img->recipe_img}}">
@@ -114,7 +127,7 @@
         @if(session('img-error'))
         <div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> {{session('img-error')}}</div>
 		@endif
-        <input type="button" value="レシピ写真を追加" class="add" id="add-img" />
+        <input type="button" value="写真を追加" class="add" id="add-img" />
 
         <div class="btn-block">
             <button type="submit" href="/">編集</button>

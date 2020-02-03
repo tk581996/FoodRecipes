@@ -8,7 +8,7 @@
         </li>
         @if(Auth::check())
         <li class="nav-item">
-          <a class="nav-link" href="{{ URL::to('/inputform') }}">レシピ投稿</a>
+          <a class="nav-link" href="{{ URL::to('/inputform') }}">レシピ新規作成</a>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownBlog" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -20,10 +20,10 @@
         </li>
         @else
         <li class="nav-item">
-          <a class="nav-link" href="{{ URL::to('/login') }}">ログイン</a>
+          <a class="nav-link" href="{{ URL::to('/register') }}">サインアップ</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ URL::to('/register') }}">サインアップ</a>
+          <a class="nav-link" href="{{ URL::to('/login') }}">ログイン</a>
         </li>
         @endif
       </ul>

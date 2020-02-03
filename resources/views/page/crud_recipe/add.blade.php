@@ -22,6 +22,19 @@
             $("#buildyourform").append(fieldWrapper);
         });
     });
+
+    $(document).ready(function() {
+        $('input[type="file"]').change(function(event) {
+            var fileSize = this.files[0].size;
+            var maxAllowedSize = 2097152;
+                // check the file size if its greater than requirement
+                if (fileSize > maxAllowedSize) {
+                    alert('写真サイズは2048kBを超える。より小さい写真サイズをアップロードしてください。');
+                    this.val('');
+                }
+
+        });
+    });
 </script>
 @endpush
 <div class="testbox">
@@ -68,7 +81,7 @@
         </div>
         @if(session('material-error'))
         <div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> {{session('material-error')}}</div>
-		@endif
+        @endif
         @error('material')
         <div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> {{ $message }}</div>
         @enderror
@@ -83,7 +96,7 @@
         @enderror
 
         <div class="item">
-            <label >何人前</label>
+            <label>何人前</label>
             <input class="@error('serving_for') is-invalid @enderror" type="number" name="serving_for" min='1' max='100' />
         </div>
         @error('serving_for')
@@ -99,19 +112,19 @@
         @enderror
 
         <div class="item" id="img">
-            <label>レシピ写真<span>*</span></label>
+            <label>レシピ写真</label>
             <input id="cv" class="@error('fileimg') is-invalid @enderror" type="file" name="fileimg[]" multiple />
         </div>
         @if(session('img-error'))
         <div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> {{session('img-error')}}</div>
-		@endif
+        @endif
         @error('fileimg')
         <div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> {{ $message }}</div>
         @enderror
         <input type="button" value="写真を追加" class="add" id="add-img" />
 
         <div class="btn-block">
-            <button type="submit" href="/">作成</button>
+            <button type="submit" href="/">投稿</button>
         </div>
     </form>
 </div>
