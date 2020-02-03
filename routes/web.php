@@ -24,6 +24,9 @@ Route::post('/login', 'PageController@postLogin');
 Route::get('/register', 'PageController@getRegister');
 Route::post('/register', 'PageController@postRegister');
 
+Route::get('/edituser', 'PageController@getEditUser');
+Route::post('/edituser', 'PageController@postEditUser');
+
 Route::get('logout', 'PageController@getLogout');
 
 Route::get('/itemdetail/{id}', 'PageController@getItemDetail');

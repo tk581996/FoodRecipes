@@ -52,7 +52,7 @@ class PageController extends Controller
             $query = $request->get('query');
             $data = DB::table('recipe')
                 ->where('is_deleted', '=', 0)
-                ->where(function ($xxx) use($query) {
+                ->where(function ($xxx) use ($query) {
                     $xxx->where('title', 'LIKE', "%$query%")
                         ->orWhere('food_name', 'LIKE', "%$query%")
                         ->orWhere('cook_time', 'LIKE', "%$query%");
@@ -173,6 +173,45 @@ class PageController extends Controller
         } else {
             return redirect('login')->with('login-error', 'このユーザーIDまたはパスワードは正しくありません。');
         }
+    }
+
+    public function getEditUser()
+    {
+        if (Auth::check()) {
+            return view('page.crud_user.edit');
+        } else {
+            return redirect()->action('PageController@getIndex');
+        }
+    }
+
+    public function postEditUser(Request $request)
+    {
+
+        $current_user = Auth::user();
+        $validatedData = $request->validate([
+            'nickname' => 'required|max:25',
+        ], [
+            'nickname.required' => 'ニックネームを入力してください',
+            'nickname.max' => 'ニックネームは、25文字の間で設定する必要があります',
+        ]);
+        $user = User::find($current_user)->first();
+        $user->nickname = $request->nickname;
+
+        if ($request->changepw == "on") {
+            $validatedData = $request->validate([
+                'password' => 'required|regex:/^[a-zA-Z0-9]+$/u|min:6',
+                'repassword' => 'required|regex:/^[a-zA-Z0-9]+$/u|min:6|same:password',
+            ], [
+                'password.required' => 'パスワードを入力してください',
+                'password.min' => 'パスワードの長さは最低6文字です',
+                'repassword.required' => 'もう一度パスワードを入力してください',
+                'repassword.min' => 'パスワードの長さは最低6文字です。',
+                'repassword.same' => 'パスワードが一致しません',
+            ]);
+            $user->password = bcrypt($request->password);
+        }
+        $user->save();
+        return redirect()->action('PageController@getEditUser')->with('register-success', '更新成功。');
     }
 
     public function getLogout()

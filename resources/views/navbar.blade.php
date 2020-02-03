@@ -15,6 +15,7 @@
             こんにちは、{{Auth::user()->nickname}}
           </a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownBlog">
+            <a class="dropdown-item" href="{{ URL::to('/edituser') }}">プロファイル編集</a>
             <a class="dropdown-item" href="{{ URL::to('/logout') }}">ログアウト</a>
           </div>
         </li>

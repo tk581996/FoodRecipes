@@ -68,7 +68,7 @@
   </div>
 
   <hr>
-  <h1 class="my-4">いらっしゃいませ、こんにちは</h1>
+  <h1 class="my-4">表示: <span style="font-size: 30px; color:grey">{{$recipes->firstItem()}}～{{$recipes->lastItem()}}件/全{{$recipes->total()}}件</span></h1>
 
   <div class="row">
     @foreach($recipes as $show_recipe)
@@ -77,15 +77,15 @@
         <a href="{{ URL::to('/itemdetail', $show_recipe->recipe_id) }}"><img class="card-img-top" src="upload/recipe-img/{{$show_recipe->recipes_img()->first()->recipe_img}}" height="234px" width="349px" alt=""></a>
         <div class="card-body">
           <h4 class="card-title" style="height:60px">
-            <a href="{{ URL::to('/itemdetail', $show_recipe->recipe_id) }}">{{mb_strimwidth($show_recipe->title, 0, 40, "...")}}</a>
+            <a href="{{ URL::to('/itemdetail', $show_recipe->recipe_id) }}">{{mb_strimwidth($show_recipe->title, 0, 41, "...")}}</a>
           </h4>
-          <p class="card-text">{{mb_strimwidth($show_recipe->food_name, 0, 10, "...")}}
+          <p class="card-text">{{mb_strimwidth($show_recipe->food_name, 0, 11, "...")}}
             <i class="far fa-clock" style='margin-left:20px'></i>
             <span style="font-size: 13px;"> {{$show_recipe->cook_time}}分ぐらい</span>
             <i class="fas fa-heart" style='margin-left:20px;color: red;'></i>
             <span>{{count($show_recipe->likes->where('is_liked',1))}}</span>
           </p>
-          <span style="font-size: 20px;">{{mb_strimwidth($show_recipe->user()->first()->nickname, 0, 20, "...")}}</span>
+          <span style="font-size: 20px;">{{mb_strimwidth($show_recipe->user()->first()->nickname, 0, 21, "...")}}</span>
           <p style="font-size: 12px;">{{$show_recipe->created_at->format('Y年m月d日、H時i分s秒')}}</p>
         </div>
       </div>
