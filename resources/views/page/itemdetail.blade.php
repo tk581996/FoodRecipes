@@ -25,13 +25,13 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 @endpush
 @push("scripts")
-  <script>
-    function likedisable(link) {
-      link.onclick = function(event) {
-        event.preventDefault();
-      }
+<script>
+  function likedisable(link) {
+    link.onclick = function(event) {
+      event.preventDefault();
     }
-  </script>
+  }
+</script>
 @endpush
 <!-- Page Content -->
 <div class="container">
@@ -146,11 +146,15 @@
         <div class="card-body">
           <form method="post" action="comment/{{$recipe->recipe_id}}">
             <div class="form-group">
-              <textarea class="form-control" onkeyup="success()" id="commentsend" rows="3" name="content"></textarea>
+              <textarea class="form-control　@error('content') is-invalid @enderror" onkeyup="success()" id="commentsend" rows="3" name="content"></textarea>
             </div>
             <button type="submit" id="button" class="btn btn-primary" disabled>投稿</button>
             {{ csrf_field() }}
           </form>
+
+          @error('content')
+          <div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> {{ $message }}</div>
+          @enderror
         </div>
       </div>
       @else
@@ -219,9 +223,10 @@
         <div class="card-body">
           <div class="row">
             <div class="col-lg-12">
-                @foreach(explode(',', $recipe->food_material) as $info)
-                <p>・{{ $info }}<p>
-                @endforeach
+              @foreach(explode(',', $recipe->food_material) as $info)
+              <p>・{{ $info }}
+                <p>
+                  @endforeach
             </div>
           </div>
         </div>
@@ -239,12 +244,16 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 <script>
-  function success() {
+  function success() { // disable comment button if blank
     var str = document.getElementById("commentsend").value;
-    if (str === "" || !$("#commentsend").val().trim().length) {
+    if (str === "" || !$("#commentsend").val().trim().length　|| str.length > 255) {
       document.getElementById('button').disabled = true;
     } else {
       document.getElementById('button').disabled = false;
+    }
+
+    if(str.length > 255) {
+      alert('入力している内容は許可される文字を超えている。255文字の間のみです。');
     }
   }
 </script>

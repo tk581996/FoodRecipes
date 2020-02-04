@@ -239,6 +239,12 @@ class PageController extends Controller
 
     public function postComment($id, Request $request)
     {
+        $validatedData = $request->validate([
+            'content' => 'max:255',
+        ], [
+            'content.max' => 'コメントは、255文字の間で設定する必要があります',
+        ]);
+        
         $comment = new Comment;
         $comment->user_id = Auth::user()->user_id;
         $comment->recipe_id = $id;
@@ -326,7 +332,6 @@ class PageController extends Controller
         foreach ($files as $file) {
             $size = $file->getSize();
             $extension = $file->getClientOriginalExtension();
-            dd($extension);
             if (in_array($extension, $list_extension) == false) {
                 return redirect('inputform')->with('img-error', 'アップロードしたファイルは写真の形式ではない。');
             } elseif ($size >= 2097152 || $size == false) {
