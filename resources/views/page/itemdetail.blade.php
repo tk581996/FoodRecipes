@@ -148,7 +148,7 @@
             <div class="form-group">
               <textarea class="form-control" onkeyup="success()" id="commentsend" rows="3" name="content"></textarea>
             </div>
-            <button type="submit" id="button" class="btn btn-primary" disabled>投稿</button>
+            <button type="submit" id="button" onclick="this.disabled=true;this.form.submit();" class="btn btn-primary" disabled>投稿</button>
             {{ csrf_field() }}
           </form>
         </div>
@@ -247,10 +247,14 @@
     } else {
       document.getElementById('button').disabled = false;
     }
-
     if(str.length > 255) {
       alert('入力している内容は許可される文字を超えている。255文字の間のみです。');
     }
+
+    // $('#button').click(function(){
+    //   document.getElementById('button').disabled = true;
+    // })
+
   }
 </script>
 @endpush

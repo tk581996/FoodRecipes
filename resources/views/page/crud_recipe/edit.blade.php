@@ -130,7 +130,7 @@
         <input type="button" value="写真を追加" class="add" id="add-img" />
 
         <div class="btn-block">
-            <button type="submit" href="/">編集</button>
+            <button onclick="this.disabled=true;this.form.submit();" type="submit" href="/">編集</button>
         </div>
         {{ csrf_field() }}
     </form>

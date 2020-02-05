@@ -74,7 +74,7 @@
                 @enderror
 
                 <div class="container-login100-form-btn">
-                    <button type="submit" class="login100-form-btn">
+                    <button onclick="this.disabled=true;this.form.submit();" type="submit" class="login100-form-btn">
                         更新
                     </button>
                 </div>

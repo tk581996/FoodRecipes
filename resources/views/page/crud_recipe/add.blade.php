@@ -124,7 +124,7 @@
         <input type="button" value="写真を追加" class="add" id="add-img" />
 
         <div class="btn-block">
-            <button type="submit" href="/">投稿</button>
+            <button onclick="this.disabled=true;this.form.submit();" type="submit" href="/">投稿</button>
         </div>
     </form>
 </div>
