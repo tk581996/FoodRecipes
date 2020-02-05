@@ -240,7 +240,7 @@ class PageController extends Controller
     public function postComment($id, Request $request)
     {
         $validatedData = $request->validate([
-            'content' => 'max:255',
+            'content' => 'required|max:255',
         ], [
             'content.max' => 'コメントは、255文字の間で設定する必要があります',
         ]);
@@ -483,27 +483,30 @@ class PageController extends Controller
         $oldimg = $request->oldfileimg;
         $newimg = [];
         if ($files != NULL) {
+            $filepath = public_path('upload/recipe-img/');
             foreach ($files as $file) {
                 $extension = $file->getClientOriginalExtension();
                 $fileimg = Auth::user()->user_id . "_" . now()->format("YmdHis") . "_" . Str::random(4) . "." . $extension;
+                $file->move($filepath, $fileimg); 
                 array_push($newimg, $fileimg);
-            }
+            } // loi vi array push chi add ten vao. Con file chua duoc upload len path
             $newimgcount = count($newimg);
             $oldimgcount = count($oldimg);
             $arrfile = [$oldimg, $newimg];
-            $filepath = public_path('upload/recipe-img/');
             if ($newimgcount <= $oldimgcount) { //update
                 for ($i = 0; $i < $newimgcount; $i++) {
+                    // $file->move($filepath, $arrfile[1][$i]); cai nay sai vi chi 1 file duoc move. Nhung dag can move nhieu file
                     $test = DB::table('recipe_img')->where('recipe_id', $id)->where('recipe_img', $arrfile[0][$i])->update(['recipe_img' => $arrfile[1][$i]]);
-                    $file->move($filepath, $arrfile[1][$i]);
                 }
             } else { //create new
+                for ($i = 0; $i < $oldimgcount; $i++) {
+                    $test = DB::table('recipe_img')->where('recipe_id', $id)->where('recipe_img', $arrfile[0][$i])->update(['recipe_img' => $arrfile[1][$i]]);
+                }
                 $tmp = $newimgcount - $oldimgcount;
                 for ($i = 0; $i < $tmp; $i++) {
                     DB::table('recipe_img')->insert(
-                        ['recipe_id' => $id, 'recipe_img' => $arr[1][$oldimgcount + $i]]
+                        ['recipe_id' => $id, 'recipe_img' => $arrfile[1][$oldimgcount + $i]]
                     );
-                    $file->move($filepath, $arrfile[1][$i]);
                 }
             }
         }

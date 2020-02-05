@@ -146,15 +146,11 @@
         <div class="card-body">
           <form method="post" action="comment/{{$recipe->recipe_id}}">
             <div class="form-group">
-              <textarea class="form-control　@error('content') is-invalid @enderror" onkeyup="success()" id="commentsend" rows="3" name="content"></textarea>
+              <textarea class="form-control" onkeyup="success()" id="commentsend" rows="3" name="content"></textarea>
             </div>
             <button type="submit" id="button" class="btn btn-primary" disabled>投稿</button>
             {{ csrf_field() }}
           </form>
-
-          @error('content')
-          <div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> {{ $message }}</div>
-          @enderror
         </div>
       </div>
       @else
