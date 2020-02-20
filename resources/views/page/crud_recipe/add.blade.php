@@ -89,7 +89,8 @@
 
         <div class="item">
             <label>材料</label>
-            <textarea type="text" class="@error('food_material') is-invalid @enderror" name="food_material"></textarea>
+            <textarea type="text" class="@error('food_material') is-invalid @enderror" name="food_material"
+            placeholder="例えば：&#10;スパゲティ（200ｇ)。&#10;豚肉またはベーコン(１００ｇ)。&#10;（文末に「。」を付けてください！）"></textarea>
         </div>
         @error('food_material')
         <div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> {{ $message }}</div>
@@ -105,7 +106,8 @@
 
         <div class="item">
             <label>作り方</label>
-            <textarea type="text" class="@error('direction') is-invalid @enderror" name="direction" rows="3"></textarea>
+            <textarea type="text" class="@error('direction') is-invalid @enderror" name="direction" rows="3"
+            placeholder="例えば：&#10;ステップ1:水を入れる。&#10;ステップ2:10分んぐらゆでる。&#10;（文末に「。」を付けてください！）"></textarea>
         </div>
         @error('direction')
         <div class="alert alert-danger"><i class="fas fa-exclamation-triangle"></i> {{ $message }}</div>

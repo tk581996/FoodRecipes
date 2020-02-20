@@ -219,7 +219,7 @@
         <div class="card-body">
           <div class="row">
             <div class="col-lg-12">
-              @foreach(explode(',', $recipe->food_material) as $info)
+              @foreach(explode('。', $recipe->food_material) as $info)
               <p>・{{ $info }}
                 <p>
                   @endforeach
